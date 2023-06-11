@@ -23,6 +23,7 @@
     "@tamagui/font-inter": "^1.31.2",
     "@tamagui/lucide-icons": "^1.31.2",
     "@tamagui/theme-base": "^1.31.2",
+    "axios": "^1.4.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "expo": "~48.0.15",
     "expo-font": "^11.1.1",
