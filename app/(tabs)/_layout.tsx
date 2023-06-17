@@ -1,12 +1,27 @@
 import { Tabs } from "expo-router";
-import { Home, Eye, Glasses } from '@tamagui/lucide-icons'
+import { TabBarIcon } from "../../components/TabBarIcon";
 
 export default function TabLayout() {
   return (
-    <Tabs>
-      <Tabs.Screen name="speechlens" options={{ headerShown: false, tabBarLabel: 'SpeechLens', tabBarIcon: () => <Eye /> }} />
-      <Tabs.Screen name="index" options={{ headerShown: false, tabBarLabel: 'Home', tabBarIcon: () => <Home /> }} />
-      <Tabs.Screen name="signa-specs" options={{ headerShown: false, tabBarLabel: 'Signa Specs', tabBarIcon: () => <Glasses /> }} />
+    <Tabs screenOptions={{
+      tabBarShowLabel: false,
+      tabBarStyle: {
+        position: 'absolute',
+        bottom: 24,
+        left: 20,
+        right: 20,
+        // elevation:
+        borderRadius: 20,
+        height: 60
+      }
+    }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          headerShown: false, tabBarLabel: 'Home',
+          tabBarIcon: (props) => TabBarIcon('index', props)
+        }}
+      />
     </Tabs>
   )
 }

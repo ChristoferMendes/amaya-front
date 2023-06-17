@@ -7,6 +7,7 @@ export const Router = () => {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} redirect={auth} />
+      <Stack.Screen name="intro/index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   )

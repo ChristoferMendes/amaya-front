@@ -7,6 +7,15 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "plugins": [
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "speechRecogntionPermission": "Allow $(PRODUCT_NAME) to securely recognize user speech"
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -16,13 +25,26 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.SpeectToTextApp",
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "This app uses speech recognition to convert your speech to text.",
+        "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#ffffff",
+        "permissions": [
+          "android.permission.RECORD_AUDIO"
+        ],
+        "package": "com.anonymous.SpeectToTextApp"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.SpeectToTextApp"
     },
     "web": {
       "bundler": "metro",

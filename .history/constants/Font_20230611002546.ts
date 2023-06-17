@@ -1,1 +1,0 @@
-export const Righteous_400Regular = 'Righteous_400Regular'
