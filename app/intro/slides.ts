@@ -1,30 +1,30 @@
 export const slides = [
   {
     key: 1,
-    title: "About us",
-    text: "The Amaya project is an innovative and inclusive company, founded by an entrepreneur with hearing and speech impairments. Our goal is to promote inclusion and empower deaf and mute individuals through the use of advanced technology, enabling them to have more effective communication and improving their quality of life.",
+    title: "Sobre nós",
+    text: "O projeto Amaya é uma empresa inovadora e inclusiva, fundada por um empreendedor com deficiência auditiva e de fala. Nosso objetivo é promover a inclusão e capacitar pessoas surdas e mudas por meio do uso de tecnologia avançada, possibilitando uma comunicação mais efetiva e melhorando sua qualidade de vida.",
     background: require("../../assets/about-us.png"),
-    alt_icon: "icon image of the informative screen one",
-    alt_background: "background image of the informative screen one",
+    alt_icon: "imagem do ícone da tela informativa um",
+    alt_background: "imagem de fundo da tela informativa um",
     summarizedText:
-      "The Amaya project is an innovative and inclusive company, empowering deaf and mute individuals through advanced technology for effective communication and improved quality of life.",
+      "O projeto Amaya é uma empresa inovadora e inclusiva que capacita pessoas surdas e mudas por meio de tecnologia avançada para comunicação efetiva e melhoria da qualidade de vida.",
   },
   {
     key: 2,
     title: "SignaVision",
-    text: "SignaVision is an innovative pair of glasses that combine style and cutting-edge technology to enhance communication for deaf and mute individuals. If you prefer not to wear contact lenses or additional glasses, these smart glasses offer a comfortable and practical alternative to facilitate speech comprehension and promote smoother interaction in different environments.",
+    text: "O SignaVision é um par de óculos inovador que combina estilo e tecnologia de ponta para melhorar a comunicação de pessoas surdas e mudas. Se você prefere não usar lentes de contato ou óculos adicionais, esses óculos inteligentes oferecem uma alternativa confortável e prática para facilitar a compreensão da fala e promover interações mais suaves em diferentes ambientes.",
     background: require("../../assets/SignaSpecs.png"),
-    alt_background: "SignVistion background image",
+    alt_background: "imagem de fundo do SignaVision",
     summarizedText:
-      "SignaVision is a stylish and innovative pair of glasses that enhance communication for deaf and mute individuals using cutting-edge technology. They offer a comfortable and practical alternative to facilitate speech comprehension and promote smoother interaction.",
+      "O SignaVision é um par de óculos estiloso e inovador que melhora a comunicação de pessoas surdas e mudas usando tecnologia de ponta. Eles oferecem uma alternativa confortável e prática para facilitar a compreensão da fala e promover interações mais suaves.",
   },
   {
     key: 3,
     title: "SpeechLens",
-    text: "SpeechLens is an innovative lens that utilizes cutting-edge technology to improve communication for deaf and mute individuals. This intelligent lens is designed to be used in conjunction with mobile devices such as smartphones or tablets and aims to facilitate lip reading and mutual understanding in various contexts.",
+    text: "O SpeechLens é uma lente inovadora que utiliza tecnologia de ponta para melhorar a comunicação de pessoas surdas e mudas. Essa lente inteligente é projetada para ser usada em conjunto com dispositivos móveis, como smartphones ou tablets, e tem como objetivo facilitar a leitura labial e a compreensão mútua em vários contextos.",
     background: require("../../assets/SpeechLens.png"),
-    alt_background: "SpeechLens background image",
+    alt_background: "imagem de fundo do SpeechLens",
     summarizedText:
-      "SpeechLens is an innovative lens that enhances communication for deaf and mute individuals using cutting-edge technology. It works with smartphones and tablets to facilitate lip reading and mutual understanding in different contexts.",
+      "O SpeechLens é uma lente inovadora que melhora a comunicação de pessoas surdas e mudas usando tecnologia de ponta. Funciona com smartphones e tablets para facilitar a leitura labial e a compreensão mútua em diferentes contextos.",
   },
 ];

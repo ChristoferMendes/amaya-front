@@ -179,10 +179,10 @@ export default function InitialScreen() {
           fontSize={"32"}
           color={"#5ce1e6"}
         >
-          PROJECT AMAYA
+          PROJETO AMAYA
         </Text>
         <Text fontFamily={"Righteous_400Regular"} fontSize={"16"}>
-          Be the change that you desire to see in the world
+          Seja a mudança que você deseja ver no mundo
         </Text>
         <Stack w="full" px={"6"} mt={"2"}>
           <Form control={control} errors={errors}>
@@ -194,7 +194,7 @@ export default function InitialScreen() {
               rightElement={renderRightInputElement("email")}
             />
             <Form.Input
-              label="Password"
+              label="Senha"
               name="password"
               _labelProps={{ _text: { fontFamily: Righteous_400Regular } }}
               rightElement={renderRightInputElement("password")}
@@ -211,15 +211,15 @@ export default function InitialScreen() {
               router.push("/intro");
             }}
           >
-            Enter as dev
+            Entre como convidado
           </Button>
           {isRegister ? (
             <Button onPress={handleSubmit(handleRegister)} mt={"4"}>
-              {loading ? "Loading..." : "Register"}
+              {loading ? "Carregando..." : "Registrar"}
             </Button>
           ) : (
             <Button onPress={handleSubmit(handleLogin)} mt="4">
-              {loading ? "Loading..." : "Login"}
+              {loading ? "Carregando..." : "Entrar"}
             </Button>
           )}
           {isRegister ? (
