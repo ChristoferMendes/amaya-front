@@ -37,6 +37,7 @@
     "expo-stt": "^0.0.3",
     "expo-system-ui": "~2.2.1",
     "expo-web-browser": "~12.1.1",
+    "moti": "^0.25.3",
     "native-base": "^3.4.28",
     "native-base-formify": "^1.0.2",
     "react": "18.2.0",

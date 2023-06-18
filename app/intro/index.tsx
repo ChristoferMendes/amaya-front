@@ -90,7 +90,7 @@ export default function Intro() {
         justifyContent={"center"}
         rounded={"md"}
       >
-        <Text color={"primary.900"}>Skip</Text>
+        <Text color={"primary.900"}>Pular</Text>
       </HStack>
     );
   };

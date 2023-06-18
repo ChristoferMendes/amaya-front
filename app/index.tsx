@@ -2,6 +2,7 @@ import {
   Button,
   FormControl,
   HStack,
+  Spinner,
   Stack,
   Text,
   VStack,
@@ -186,7 +187,7 @@ export default function InitialScreen() {
         </Text>
         <Stack w="full" px={"6"} mt={"2"}>
           <Form control={control} errors={errors}>
-            {isRegister && ((<Form.Input name="name" label="Name" />) as any)}
+            {isRegister && ((<Form.Input name="name" label="Nome" />) as any)}
             <Form.Input
               name="email"
               label="Email"
@@ -215,11 +216,11 @@ export default function InitialScreen() {
           </Button>
           {isRegister ? (
             <Button onPress={handleSubmit(handleRegister)} mt={"4"}>
-              {loading ? "Carregando..." : "Registrar"}
+              {loading ? <Spinner /> : "Registrar"}
             </Button>
           ) : (
             <Button onPress={handleSubmit(handleLogin)} mt="4">
-              {loading ? "Carregando..." : "Entrar"}
+              {loading ? <Spinner /> : "Entrar"}
             </Button>
           )}
           {isRegister ? (
@@ -235,13 +236,13 @@ export default function InitialScreen() {
             </HStack>
           ) : (
             <HStack justifyContent="center" space="2" mt={"2"}>
-              <Text>Does not have an account?</Text>
+              <Text>Ainda não possui uma conta?</Text>
               <Text
                 color={"#5ce1e6"}
                 fontWeight={"900"}
                 onPress={toggleRegister}
               >
-                Sign up now
+                Registre
               </Text>
             </HStack>
           )}
