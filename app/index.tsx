@@ -7,7 +7,14 @@ import {
   VStack,
   useToast,
 } from "native-base";
-import { Glasses, Mail, Eye, EyeOff, User } from "@tamagui/lucide-icons";
+import {
+  Glasses,
+  Mail,
+  Eye,
+  EyeOff,
+  User,
+  Import,
+} from "@tamagui/lucide-icons";
 import { InputIconContainer } from "../components/InputIconContainer";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,8 +22,20 @@ import { api } from "../service/api";
 import { tryCatch } from "../utils/tryCatch";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
-import Form2 from "native-base-formify";
-import Form from "react-native-formify";
+import Form from "native-base-formify";
+import { useAuth } from "../store/useAuth";
+import { Righteous_400Regular } from "../constants/Font";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useUser } from "../store/useUser";
+
+const UserSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().email({ message: "Must be a valid email" }),
+  password: z.string().min(6, { message: "Must be at least 6 characters" }),
+});
+
+export type IUser = z.infer<typeof UserSchema>;
 
 export default function InitialScreen() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -24,10 +43,21 @@ export default function InitialScreen() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    setError,
+    reset,
+  } = useForm<IUser>({
+    resolver: zodResolver(UserSchema),
+  });
   const [isRegister, setIsRegister] = useState(false);
   const toast = useToast();
   const router = useRouter();
+  const {
+    actions: { login },
+  } = useAuth();
+  const {
+    actions: { storeUser },
+  } = useUser();
+  const [loading, setLoading] = useState(false);
 
   const renderRightInputElement = (inputType?: "email" | "password") => {
     if (inputType === "email") {
@@ -59,45 +89,84 @@ export default function InitialScreen() {
     );
   };
 
-  const login = async (formData: any) => {
-    const [data, error] = await tryCatch(api.post("/login", formData));
+  const treatError = (error: Error | null | undefined) => {
     const isAxiosError = error instanceof AxiosError;
 
     if (!isAxiosError) {
-      toast.show({
-        title: "Login successful",
-        backgroundColor: "green.500",
-        duration: 800,
-      });
-      return navigateToHome();
+      toast.show({ title: "Something went wrong" });
+      return false;
     }
 
-    const message = error.response?.data?.message;
-    if (!message) return;
+    if (!error.response?.data.message) {
+      toast.show({ title: "Something went wrong" });
+      return false;
+    }
 
-    toast.show({ title: message, backgroundColor: "red.500", duration: 800 });
+    if (error) {
+      const { message, type } = error.response.data;
+
+      console.log(error);
+      setError(type, { message });
+      return false;
+    }
+
+    return true;
+  };
+
+  const successLoggedIn = () => {
+    navigateToHome();
+    toast.show({ title: "Success" });
   };
 
   const navigateToHome = () => {
-    router.push("/home");
+    router.push("/intro");
   };
 
-  const register = async (formData: any) => {
-    const [data, error] = await tryCatch(api.post("/register", formData));
-    const isAxiosError = error instanceof AxiosError;
+  const errorToast = () => {
+    toast.show({ title: "Something went wrong" });
+    setLoading(false);
+  };
 
-    if (!isAxiosError) {
-      return navigateToHome();
-    }
+  function verifyData<T>(data: T | AxiosError | null): data is T {
+    return data !== null && !(data instanceof AxiosError);
+  }
 
-    const message = error.response?.data?.message;
+  const handleLogin = async (formData: any) => {
+    setLoading(true);
+    const [data, error] = await tryCatch<IUser>(api.post("/login", formData));
 
-    if (!message) return;
+    const hasError = treatError(error);
+    if (hasError) return errorToast();
 
-    toast.show({ title: message, backgroundColor: "red.500", duration: 800 });
+    const dataIsClean = verifyData<IUser>(data);
+
+    if (!dataIsClean) return errorToast();
+
+    setLoading(false);
+    storeUser(data);
+    successLoggedIn();
+  };
+
+  const handleRegister = async (formData: IUser) => {
+    setLoading(true);
+    const [data, error] = await tryCatch<IUser>(
+      api.post("/register", formData)
+    );
+
+    const hasError = treatError(error);
+    if (hasError) return errorToast();
+
+    const dataIsClean = verifyData<IUser>(data);
+
+    if (!dataIsClean) return errorToast();
+
+    storeUser(data);
+    successLoggedIn();
+    setLoading(false);
   };
 
   const toggleRegister = () => {
+    reset();
     setIsRegister(!isRegister);
   };
 
@@ -116,26 +185,43 @@ export default function InitialScreen() {
           Be the change that you desire to see in the world
         </Text>
         <Stack w="full" px={"6"} mt={"2"}>
-          {/* <Form2 control={control} errors={errors}>
-            <Form2.Input name="name" />
-            <Form2.TextArea name="hello!" labelText="Hello!" />
-          </Form2> */}
           <Form control={control} errors={errors}>
-            <Form.Input name="name" />
-            <Form.TextArea name="desc" />
+            {isRegister && ((<Form.Input name="name" label="Name" />) as any)}
+            <Form.Input
+              name="email"
+              label="Email"
+              _labelProps={{ _text: { fontFamily: Righteous_400Regular } }}
+              rightElement={renderRightInputElement("email")}
+            />
+            <Form.Input
+              label="Password"
+              name="password"
+              _labelProps={{ _text: { fontFamily: Righteous_400Regular } }}
+              rightElement={renderRightInputElement("password")}
+            />
           </Form>
-          <Button onPress={handleSubmit((data) => console.log(data))}>
-            Submit
+          <Button
+            mt="5"
+            onPress={() => {
+              storeUser({
+                email: "dev@gmail.com",
+                password: "123",
+                name: "DEV",
+              });
+              router.push("/intro");
+            }}
+          >
+            Enter as dev
           </Button>
-          {/* {isRegister ? (
-            <Button mt={"4"} onPress={handleSubmit(register)}>
-              Register
+          {isRegister ? (
+            <Button onPress={handleSubmit(handleRegister)} mt={"4"}>
+              {loading ? "Loading..." : "Register"}
             </Button>
           ) : (
-            <Button mt={"4"} onPress={handleSubmit(login)}>
-              Login
+            <Button onPress={handleSubmit(handleLogin)} mt="4">
+              {loading ? "Loading..." : "Login"}
             </Button>
-          )} */}
+          )}
           {isRegister ? (
             <HStack justifyContent={"center"} space="2" mt={"2"}>
               <Text>Already have an account?</Text>
@@ -160,7 +246,6 @@ export default function InitialScreen() {
             </HStack>
           )}
         </Stack>
-        <FormControl></FormControl>
       </VStack>
     </>
   );

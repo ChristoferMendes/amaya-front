@@ -14,6 +14,12 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "speechRecogntionPermission": "Allow $(PRODUCT_NAME) to securely recognize user speech"
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
       ]
     ],
     "splash": {
@@ -42,13 +48,19 @@
         "package": "com.anonymous.SpeectToTextApp"
       },
       "permissions": [
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA"
       ],
       "package": "com.anonymous.SpeectToTextApp"
     },
     "web": {
       "bundler": "metro",
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d4e1a91d-fc1e-4de8-929d-6c3f15c9ba6d"
+      }
     }
   }
 }
