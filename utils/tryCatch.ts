@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { api } from "../service/api";
 
 export type TryCatch<T> = Promise<
   [T, null] | [null, Error] | [null | AxiosError]

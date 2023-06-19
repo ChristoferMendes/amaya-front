@@ -6,6 +6,7 @@ import {
   Stack,
   Text,
   VStack,
+  View,
   useToast,
 } from "native-base";
 import {
@@ -21,7 +22,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { api } from "../service/api";
 import { tryCatch } from "../utils/tryCatch";
-import { AxiosError } from "axios";
+import { Axios, AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "expo-router";
 import Form from "native-base-formify";
 import { useAuth } from "../store/useAuth";
@@ -30,9 +31,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useUser } from "../store/useUser";
 
+const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u);
+
 const UserSchema = z.object({
   name: z.string().optional(),
-  email: z.string().email({ message: "Must be a valid email" }),
+  email: z.preprocess(
+    trimString,
+    z.string().email({ message: "Must be a valid email" })
+  ),
   password: z.string().min(6, { message: "Must be at least 6 characters" }),
 });
 
@@ -128,40 +134,30 @@ export default function InitialScreen() {
     setLoading(false);
   };
 
-  function verifyData<T>(data: T | AxiosError | null): data is T {
-    return data !== null && !(data instanceof AxiosError);
-  }
-
   const handleLogin = async (formData: any) => {
     setLoading(true);
-    const [data, error] = await tryCatch<IUser>(api.post("/login", formData));
+    const [data, error] = await tryCatch(api.post("/login", formData));
 
     const hasError = treatError(error);
     if (hasError) return errorToast();
 
-    const dataIsClean = verifyData<IUser>(data);
-
-    if (!dataIsClean) return errorToast();
+    if (data !== null && data instanceof AxiosError) return errorToast();
 
     setLoading(false);
-    storeUser(data);
+    storeUser(data?.data);
     successLoggedIn();
   };
 
   const handleRegister = async (formData: IUser) => {
     setLoading(true);
-    const [data, error] = await tryCatch<IUser>(
-      api.post("/register", formData)
-    );
+    const [data, error] = await tryCatch(api.post("/register", formData));
 
     const hasError = treatError(error);
     if (hasError) return errorToast();
 
-    const dataIsClean = verifyData<IUser>(data);
+    if (data !== null && data instanceof AxiosError) return errorToast();
 
-    if (!dataIsClean) return errorToast();
-
-    storeUser(data);
+    storeUser(data?.data);
     successLoggedIn();
     setLoading(false);
   };
@@ -197,31 +193,42 @@ export default function InitialScreen() {
             <Form.Input
               label="Senha"
               name="password"
+              type={isPasswordVisible ? "text" : "password"}
               _labelProps={{ _text: { fontFamily: Righteous_400Regular } }}
               rightElement={renderRightInputElement("password")}
             />
           </Form>
-          <Button
-            mt="5"
-            onPress={() => {
-              storeUser({
-                email: "dev@gmail.com",
-                password: "123",
-                name: "DEV",
-              });
-              router.push("/intro");
-            }}
-          >
-            Entre como convidado
-          </Button>
           {isRegister ? (
-            <Button onPress={handleSubmit(handleRegister)} mt={"4"}>
-              {loading ? <Spinner /> : "Registrar"}
-            </Button>
+            <HStack>
+              <Button
+                onPress={handleSubmit(handleRegister)}
+                mt="4"
+                w="full"
+                h="12"
+              >
+                {loading ? (
+                  <Spinner size={"lg"} color={"cyan.400"} />
+                ) : (
+                  "Registrar"
+                )}
+              </Button>
+            </HStack>
           ) : (
-            <Button onPress={handleSubmit(handleLogin)} mt="4">
-              {loading ? <Spinner /> : "Entrar"}
-            </Button>
+            <HStack>
+              <Button
+                onPress={handleSubmit(handleLogin)}
+                mt="4"
+                w="full"
+                h="12"
+              >
+                {loading ? <Spinner size={"lg"} color={"cyan.400"} /> : "Enter"}
+              </Button>
+            </HStack>
+            // <Button onPress={handleSubmit(handleLogin)} mt="4">
+            //   <View>
+            //     {/* {loading ? <Spinner /> : <Spinner size={"2"} color={"white"} />} */}
+            //   </View>
+            // </Button>
           )}
           {isRegister ? (
             <HStack justifyContent={"center"} space="2" mt={"2"}>
